@@ -1,50 +1,143 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+## Sync Impact Report
+- Version change: N/A (initial) → 1.0.0
+- Modified principles: N/A (initial ratification)
+- Added sections: Core Principles (4), Performance Standards, Development Workflow, Governance
+- Removed sections: N/A
+- Templates requiring updates:
+  - plan-template.md: ✅ compatible (Constitution Check section present)
+  - spec-template.md: ✅ compatible (User Scenarios align with testing principles)
+  - tasks-template.md: ✅ compatible (test task phases align with Test-First principle)
+- Follow-up TODOs: None
+-->
+
+# SAT Project Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality First
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+All code MUST meet established quality standards before merge:
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+- **Static Analysis**: Code MUST pass linting and type checking with zero errors
+- **Clean Architecture**: Modules MUST have single responsibility; dependencies MUST flow inward
+- **Documentation**: Public APIs MUST include docstrings; complex logic MUST include inline comments
+- **Code Review**: All changes MUST receive at least one approval before merge
+- **No Dead Code**: Unused imports, variables, and functions MUST be removed
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Rationale**: Technical debt compounds exponentially. Enforcing quality at the gate prevents
+degradation and maintains long-term velocity.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. Test-First Development (NON-NEGOTIABLE)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Tests MUST be written and approved before implementation begins:
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- **Red-Green-Refactor**: Write failing test → implement minimal code → refactor
+- **Coverage Requirements**: New code MUST achieve ≥80% line coverage; critical paths MUST have 100%
+- **Test Types Required**:
+  - Unit tests for all business logic
+  - Integration tests for cross-module interactions
+  - Contract tests for external API boundaries
+- **Test Independence**: Each test MUST be isolated and repeatable without external state
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Rationale**: Tests written after implementation tend to verify implementation rather than
+requirements. Test-first ensures behavior is specified before code exists.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. User Experience Consistency
+
+All user-facing interfaces MUST maintain consistent behavior and appearance:
+
+- **Design System**: UI components MUST use established patterns and tokens
+- **Error Handling**: User-facing errors MUST be actionable and human-readable
+- **Loading States**: Async operations MUST provide feedback within 100ms
+- **Accessibility**: All interfaces MUST meet WCAG 2.1 AA compliance minimum
+- **Responsive Design**: Interfaces MUST function across supported viewport sizes
+- **Predictable Behavior**: Similar actions MUST produce similar outcomes across the application
+
+**Rationale**: Inconsistent UX erodes user trust and increases cognitive load. Consistency
+reduces learning curve and support burden.
+
+### IV. Performance by Design
+
+Performance MUST be considered during design, not retrofitted:
+
+- **Response Time Targets**:
+  - User interactions: <100ms perceived response
+  - API calls: <200ms p95 latency
+  - Page loads: <1s Time to Interactive
+- **Resource Budgets**: Define memory and CPU budgets per feature during planning
+- **Monitoring**: All production code MUST emit performance metrics
+- **Regression Prevention**: Performance tests MUST run in CI; regressions MUST block merge
+- **Efficient Algorithms**: O(n²) or worse complexity MUST be justified and documented
+
+**Rationale**: Performance is a feature. Users equate speed with quality. Retrofitting
+performance is 10x more expensive than designing for it.
+
+## Performance Standards
+
+Quantitative thresholds that MUST be met for production deployment:
+
+| Metric | Target | Threshold |
+|--------|--------|-----------|
+| API p50 latency | <50ms | <100ms |
+| API p95 latency | <100ms | <200ms |
+| API p99 latency | <200ms | <500ms |
+| Error rate | <0.1% | <1% |
+| Memory per request | <50MB | <100MB |
+| CPU per request | <100ms | <250ms |
+| Time to Interactive | <500ms | <1s |
+
+- **Target**: Ideal performance level to aim for
+- **Threshold**: Maximum acceptable; exceeding MUST block deployment
+
+## Development Workflow
+
+### Quality Gates
+
+Every PR MUST pass these gates before merge:
+
+1. **Lint Gate**: Zero linting errors or warnings
+2. **Type Gate**: Full type coverage, no `any` escapes without justification
+3. **Test Gate**: All tests pass; coverage thresholds met
+4. **Performance Gate**: No performance regressions detected
+5. **Review Gate**: At least one approval from code owner
+
+### Branch Strategy
+
+- `main`: Production-ready code only
+- `develop`: Integration branch for features
+- `feature/*`: Individual feature branches
+- `hotfix/*`: Emergency production fixes
+
+### Commit Standards
+
+- Commits MUST follow Conventional Commits format
+- Commits MUST be atomic (one logical change per commit)
+- Commit messages MUST be descriptive and reference issues when applicable
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. Conflicts MUST be resolved
+in favor of constitution principles.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### Amendment Process
+
+1. **Proposal**: Submit amendment request with rationale and impact analysis
+2. **Review**: Minimum 3-day review period for team feedback
+3. **Approval**: Requires consensus from project maintainers
+4. **Migration**: Breaking changes MUST include migration plan and timeline
+
+### Compliance
+
+- All PRs MUST include constitution compliance verification
+- Violations MUST be documented and resolved before merge
+- Exceptions MUST be justified, time-boxed, and tracked as tech debt
+
+### Versioning
+
+Constitution versions follow Semantic Versioning:
+- **MAJOR**: Backward-incompatible principle changes or removals
+- **MINOR**: New principles or expanded guidance
+- **PATCH**: Clarifications and non-semantic refinements
+
+**Version**: 1.0.0 | **Ratified**: 2026-02-22 | **Last Amended**: 2026-02-22

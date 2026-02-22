@@ -1,0 +1,26 @@
+{
+  "station": {
+    "x": 0,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "anchorX": 32,
+    "anchorY": 32
+  },
+  "navigation": {
+    "x": 64,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "anchorX": 32,
+    "anchorY": 32
+  },
+  "weather": {
+    "x": 128,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "anchorX": 32,
+    "anchorY": 32
+  }
+}
