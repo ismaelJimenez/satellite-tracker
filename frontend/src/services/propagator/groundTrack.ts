@@ -29,45 +29,44 @@ export function calculateGroundTrack(
     timestamp: pos.timestamp,
   }));
 
-  // Handle antimeridian crossing - split paths that cross ±180°
-  const splitPoints = handleAntimeridianCrossing(points);
+  // Split path into segments at antimeridian crossings
+  const segments = splitAtAntimeridian(points);
 
   return {
     noradId: sat.noradId,
-    points: splitPoints,
+    segments,
   };
 }
 
 /**
- * Handle paths that cross the antimeridian (±180° longitude)
- * Insert NaN to break the path at crossing points
+ * Split a path into segments at antimeridian crossings (±180° longitude).
+ * Each segment is a continuous array of points that doesn't cross the boundary.
  */
-function handleAntimeridianCrossing(points: GroundTrackPoint[]): GroundTrackPoint[] {
-  if (points.length < 2) return points;
+function splitAtAntimeridian(points: GroundTrackPoint[]): GroundTrackPoint[][] {
+  if (points.length === 0) return [];
 
-  const result: GroundTrackPoint[] = [];
-  
-  for (let i = 0; i < points.length; i++) {
-    const current = points[i];
-    result.push(current);
+  const segments: GroundTrackPoint[][] = [];
+  let current: GroundTrackPoint[] = [points[0]];
 
-    if (i < points.length - 1) {
-      const next = points[i + 1];
-      const lonDiff = Math.abs(next.longitude - current.longitude);
-      
-      // If longitude difference is > 180°, we crossed the antimeridian
-      if (lonDiff > 180) {
-        // Insert a NaN point to break the path
-        result.push({
-          longitude: NaN,
-          latitude: NaN,
-          timestamp: new Date((current.timestamp.getTime() + next.timestamp.getTime()) / 2),
-        });
-      }
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const pt = points[i];
+    const lonDiff = Math.abs(pt.longitude - prev.longitude);
+
+    if (lonDiff > 180) {
+      // Antimeridian crossing — start a new segment
+      segments.push(current);
+      current = [pt];
+    } else {
+      current.push(pt);
     }
   }
 
-  return result;
+  if (current.length > 0) {
+    segments.push(current);
+  }
+
+  return segments;
 }
 
 /**

@@ -52,7 +52,8 @@ describe('calculateGroundTrack', () => {
 
     expect(track).not.toBeNull();
     expect(track!.noradId).toBe(25544);
-    expect(track!.points.length).toBeGreaterThan(100); // 90 min at 30 sec resolution
+    const totalPoints = track!.segments.reduce((sum, seg) => sum + seg.length, 0);
+    expect(totalPoints).toBeGreaterThan(100); // 90 min at 30 sec resolution
   });
 
   it('includes past and future positions', () => {
@@ -63,16 +64,13 @@ describe('calculateGroundTrack', () => {
     expect(track).not.toBeNull();
     
     // First point should be ~45 minutes before center
-    const firstPoint = track!.points[0];
-    if (!isNaN(firstPoint.longitude)) {
-      expect(firstPoint.timestamp.getTime()).toBeLessThan(centerTime.getTime());
-    }
+    const firstPoint = track!.segments[0][0];
+    expect(firstPoint.timestamp.getTime()).toBeLessThan(centerTime.getTime());
 
     // Last point should be ~45 minutes after center
-    const lastPoint = track!.points[track!.points.length - 1];
-    if (!isNaN(lastPoint.longitude)) {
-      expect(lastPoint.timestamp.getTime()).toBeGreaterThan(centerTime.getTime());
-    }
+    const lastSegment = track!.segments[track!.segments.length - 1];
+    const lastPoint = lastSegment[lastSegment.length - 1];
+    expect(lastPoint.timestamp.getTime()).toBeGreaterThan(centerTime.getTime());
   });
 
   it('returns null for satellite without satrec', () => {

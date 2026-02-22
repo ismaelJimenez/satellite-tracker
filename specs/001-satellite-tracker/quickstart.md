@@ -361,7 +361,7 @@ export function SatelliteMap() {
       }}
     >
       <Map
-        mapStyle="https://demotiles.maplibre.org/style.json"
+        mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json"
         style={{ width: '100%', height: '100vh' }}
       />
     </DeckGL>

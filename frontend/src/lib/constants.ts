@@ -51,8 +51,8 @@ export const GROUND_TRACK_STYLE = {
   width: 2,
 };
 
-/** MapLibre style URL */
-export const MAP_STYLE_URL = 'https://demotiles.maplibre.org/style.json';
+/** MapLibre style URL – CartoDB Dark Matter (no labels) */
+export const MAP_STYLE_URL = 'https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json';
 
 /** Icon atlas configuration */
 export const ICON_ATLAS_URL = '/icons/satellite-atlas.png';

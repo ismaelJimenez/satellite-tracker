@@ -34,7 +34,7 @@ This document consolidates research findings for the technical decisions require
 - Use `IconLayer` for satellite icons with `transitions` for smooth position updates
 - Use `PathLayer` for ground tracks (or `ArcLayer` for 3D arcs)
 - `react-map-gl` provides the MapLibre basemap
-- Free tile options: MapTiler free tier, OpenStreetMap raster
+- Free tile source: CartoDB Dark Matter (no labels) — no API key required
 
 ---
 
@@ -187,7 +187,7 @@ export default defineConfig({
 ## 5. Additional Dependencies
 
 ### Map Tiles
-- **Primary**: MapTiler free tier (100k requests/month)
+- **Primary**: CartoDB Dark Matter (no labels) — free, no API key required
 - **Fallback**: OpenStreetMap raster tiles (no API key)
 
 ### Ground Track Calculations
@@ -227,5 +227,5 @@ export default defineConfig({
 | SGP4 library choice? | satellite.js with WASM bulk propagation |
 | UI framework for real-time updates? | React 18 with Zustand state |
 | Testing stack for 80% coverage? | Vitest + Playwright |
-| Map tile source? | MapTiler free tier / OSM fallback |
+| Map tile source? | CartoDB Dark Matter (no labels) / OSM fallback |
 | Smooth satellite movement? | deck.gl built-in transitions |

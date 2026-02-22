@@ -113,7 +113,7 @@ describe('SatelliteStore', () => {
     it('clears ground track when selection changes', () => {
       useSatelliteStore.getState().setGroundTrack({
         noradId: 1,
-        points: [],
+        segments: [],
       });
 
       useSatelliteStore.getState().selectSatellite(2);
@@ -178,9 +178,11 @@ describe('SatelliteStore', () => {
     it('sets ground track', () => {
       const track = {
         noradId: 25544,
-        points: [
-          { latitude: 0, longitude: 0, timestamp: new Date() },
-          { latitude: 10, longitude: 10, timestamp: new Date() },
+        segments: [
+          [
+            { latitude: 0, longitude: 0, timestamp: new Date() },
+            { latitude: 10, longitude: 10, timestamp: new Date() },
+          ],
         ],
       };
 
@@ -192,7 +194,7 @@ describe('SatelliteStore', () => {
     it('clears ground track with null', () => {
       useSatelliteStore.getState().setGroundTrack({
         noradId: 1,
-        points: [],
+        segments: [],
       });
 
       useSatelliteStore.getState().setGroundTrack(null);

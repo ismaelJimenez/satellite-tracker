@@ -110,8 +110,8 @@ export interface GroundTrackPoint {
 export interface GroundTrack {
   /** Satellite NORAD ID */
   noradId: number;
-  /** Array of track points */
-  points: GroundTrackPoint[];
+  /** Path segments split at antimeridian crossings */
+  segments: GroundTrackPoint[][];
 }
 
 /** Category filter state */

@@ -8,7 +8,7 @@ import type { PickingInfo } from '@deck.gl/core';
 import { useSatelliteStore, useVisibleSatellites } from '@/features/satellites/store';
 import { INITIAL_VIEW_STATE, MAP_STYLE_URL, ICON_SIZE, TRANSITION_DURATION_MS, GROUND_TRACK_STYLE } from '@/lib/constants';
 import { CATEGORY_COLORS } from '@/types/category';
-import type { Satellite, GroundTrack } from '@/types';
+import type { Satellite, GroundTrackPoint } from '@/types';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 /**
@@ -89,12 +89,12 @@ export function SatelliteMap() {
       })
     );
 
-    if (groundTrack && groundTrack.points.length > 0) {
+    if (groundTrack && groundTrack.segments.length > 0) {
       result.push(
-        new PathLayer({
+        new PathLayer<GroundTrackPoint[]>({
           id: 'ground-track',
-          data: [groundTrack],
-          getPath: (d: GroundTrack) => d.points.map((p) => [p.longitude, p.latitude] as [number, number]),
+          data: groundTrack.segments,
+          getPath: (segment) => segment.map((p) => [p.longitude, p.latitude] as [number, number]),
           getColor: GROUND_TRACK_STYLE.color,
           widthMinPixels: GROUND_TRACK_STYLE.width,
           jointRounded: true,
